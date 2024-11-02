@@ -1,5 +1,5 @@
-nomad_server: false
-nomad_agent: false
+#nomad_server: false
+#nomad_agent: false
 data_center_name: "dc1"
 bootstrap_expect: 1
 docker_sock_enabled: false

@@ -1,0 +1,32 @@
+data_dir  = "/opt/nomad/data"
+bind_addr = "0.0.0.0"
+datacenter = "{{ data_center_name }}"
+
+server {
+  enabled          = true
+  bootstrap_expect = {{ bootstrap_expect }}
+}
+
+ui {
+  enabled = true
+  label {
+    text             = "{{ data_center_name }}"
+    background_color = "{{ nomad_ui_label_backgroung_color }}"
+    text_color       = "{{ nomad_ui_label_text_color }}"
+  }
+}
+
+client {
+  enabled = true
+
+{% if docker_privileged_mode|bool %}
+plugin "docker" {
+  config {
+    allow_privileged = true
+  }
+}
+{% endif %}
+
+consul {
+  address = "127.0.0.1:8500"
+}
