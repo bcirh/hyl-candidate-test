@@ -1,12 +1,12 @@
 ##AUTH###
 variable "client_id" {
   description = "Azure Client ID (will be overriden in runtime)"
-  default = "##{appId}##"
+  default     = "##{appId}##"
 }
 
 variable "client_secret" {
   description = "Azure Client Secret (will be overriden in runtime)"
-  default = "##{secret}##"
+  default     = "##{secret}##"
 }
 
 variable "subscription_id" {

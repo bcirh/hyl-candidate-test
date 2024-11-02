@@ -8,7 +8,7 @@ resource "azurerm_virtual_network" "hylastix_minimal_vnet" {
 resource "azurerm_subnet" "hylastix_minimal_subnet" {
   name                 = "hylastix-minimal-${var.environment}"
   resource_group_name  = azurerm_resource_group.hylastix_min_rg.name
-  virtual_network_name = azurerm_virtual_network.hylastix_min_rg.name
+  virtual_network_name = azurerm_virtual_network.hylastix_minimal_vnet.name
   address_prefixes     = ["192.168.1.0/27"]
 }
 
@@ -21,7 +21,7 @@ resource "azurerm_public_ip" "hylastix_minimal_public_ip" {
 }
 
 data "azurerm_public_ip" "hylastix_minimal_public_ip" {
-  name                = azurerm_public_ip.monitoring_public_ip.name
+  name                = azurerm_public_ip.hylastix_minimal_public_ip.name
   resource_group_name = azurerm_resource_group.hylastix_min_rg.name
 }
 
