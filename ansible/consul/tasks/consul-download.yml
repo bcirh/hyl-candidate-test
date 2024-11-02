@@ -1,0 +1,17 @@
+- name: Add Consul apt key
+  apt_key:
+    url: https://apt.releases.hashicorp.com/gpg
+  become: yes
+
+- name: Add Consul repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
+    state: present
+  become: yes
+
+- name: Install Consul
+  apt:
+    pkg: 
+    - consul
+    update_cache: yes
+  become: yes

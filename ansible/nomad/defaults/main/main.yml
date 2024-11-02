@@ -1,0 +1,12 @@
+nomad_server: false
+nomad_agent: false
+data_center_name: "dc1"
+bootstrap_expect: 1
+docker_sock_enabled: false
+docker_privileged_mode: false
+nomad_ui_label_backgroung_color: purple
+nomad_ui_label_text_color: white
+###
+psql_password: changeme
+keycloak_admin_user: admin
+keycloak_admin_password: changeme

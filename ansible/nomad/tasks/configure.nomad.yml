@@ -1,0 +1,27 @@
+- name: Nomad template configuration file
+  template:
+    src: nomad.hcl.j2
+    dest: /etc/nomad.d/nomad.hcl
+    owner: nomad
+    group: nomad
+  notify: Restart Nomad
+  become: yes
+
+- name: Flush hanglers
+  meta: flush_handlers
+
+- name: Start and enable Nomad service
+  service:
+    name: nomad
+    state: started
+    enabled: yes
+  become: yes
+
+- name: Check if Nomad is available and returning status 200
+  uri:
+    url: http://127.0.0.1:4646/v1/agent/health?type=server
+  register: result
+  until: "result.status == 200"
+  retries: 20
+  delay: 25
+  when: nomad_server|bool

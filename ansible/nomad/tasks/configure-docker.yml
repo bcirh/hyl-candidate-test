@@ -1,0 +1,23 @@
+- name: Install docker.io
+  apt:
+    pkg:
+    - docker.io
+    update_cache: yes
+  become: yes
+
+- name: Configure Docker daemon.json file
+  copy:
+    src: docker-daemon.json
+    dest: /etc/docker/daemon.json
+  notify: Restart Docker
+  become: yes
+
+- name: Set Docker DNS Forwarding
+  copy:
+    src: docker.conf
+    dest: /etc/systemd/resolved.conf.d/docker.conf
+  notify: Restart systemd-resolved service
+  become: yes
+
+- name: Flush hanglers
+  meta: flush_handlers

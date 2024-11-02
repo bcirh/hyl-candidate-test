@@ -1,0 +1,20 @@
+- name: Check if Consul is already installed.
+  stat: path=/etc/consul.d/consul.hcl
+  register: consul_installed
+
+- name: Download and Install Consul
+  include_tasks: consul-download.yml
+  when: not consul_installed.stat.exists
+
+- name: Configure Consul
+  include_tasks: consul-configuration.yml
+
+- name: Setup DNS forwarding to consul
+  include_tasks: consul-dns-forwarding.yml
+
+- name: Start and enable Consul service
+  service:
+    name: consul
+    state: started
+    enabled: yes
+  become: yes

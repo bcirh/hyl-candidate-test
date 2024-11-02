@@ -1,0 +1,17 @@
+- name: Restart Nomad
+  service:
+    name: nomad
+    state: restarted
+  become: yes
+
+- name: Restart Docker
+  service:
+    name: docker
+    state: restarted
+  become: yes
+
+- name: Restart systemd-resolved service
+  service:
+    name: systemd-resolved
+    state: restarted
+  become: yes

@@ -1,0 +1,29 @@
+datacenter = "{{ data_center_name }}"
+
+data_dir = "/opt/consul"
+
+client_addr = "0.0.0.0"
+
+{% if enable_local_script_checks|bool %}
+enable_local_script_checks = true
+{% endif %}
+
+{% if consul_server|bool %}
+ui_config{
+  enabled = true
+}
+{% endif %}
+
+{% if consul_server|bool %}
+server = true
+{% else %}
+server = false
+{% endif %}
+
+bind_addr = {% raw %}"{{ GetPrivateInterfaces | include \"network\" \"{% endraw %}{{ ansible_default_ipv4.address }}/24\"{% raw %} | attr \"address\" }}"{% endraw %} # Listen on all IPv4
+
+{% if consul_server|bool %}
+bootstrap_expect={{ groups['consul_server'] | length }}
+{% endif %}
+
+retry_join = ["{{ consul_server_ips }}"]

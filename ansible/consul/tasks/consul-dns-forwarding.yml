@@ -1,0 +1,12 @@
+- name: Make resolved.conf.d directory
+  file:
+    path: /etc/systemd/resolved.conf.d
+    state: directory
+  become: yes
+
+- name: Copy consul.conf
+  copy:
+    src: consul.conf
+    dest: /etc/systemd/resolved.conf.d/consul.conf
+  notify: Restart systemd-resolved service
+  become: yes

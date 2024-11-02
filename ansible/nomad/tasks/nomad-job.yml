@@ -1,0 +1,20 @@
+- name: Install python-nomad package
+  pip:
+    name: python-nomad
+
+- name: Find nomad jobs
+  ansible.builtin.find:
+    paths: "{{ role_path }}/templates/jobs"
+  delegate_to: localhost
+  run_once: true
+  register: jobs
+
+- name: Create Nomad jobs
+  community.general.nomad_job:
+    host: localhost
+    state: present
+    content: "{{ lookup('ansible.builtin.template', '{{ item.path }}') }}"
+    timeout: 120
+    use_ssl: false
+  run_once: true
+  loop: "{{ jobs.files }}"

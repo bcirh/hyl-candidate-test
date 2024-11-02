@@ -1,0 +1,46 @@
+job "keycloak" {
+  datacenters = ["{{ data_center_name }}"]
+  group "auth" {
+
+    count = 1
+
+    network {
+      port "http" {
+        static = 8080
+      }
+    }
+
+    service {
+      name = "keycloak"
+      port     = "http"
+      tags = []
+    }
+
+    task "keycloak" {
+      driver = "docker"
+
+      config {
+        image   = "quay.io/keycloak/keycloak:26.0.4"
+        args = [
+          "start",
+          "--proxy-headers", "xforwarded",
+          "--hostname-strict", "false",
+          "--db-url", "jdbc:postgresql://postgres.service.consul:5432/keycloak"
+        ]
+        ports   = ["http"]
+      }
+      env {
+        KEYCLOAK_ADMIN = "{{ keycloak_admin_user }}"
+        KEYCLOAK_ADMIN_PASSWORD = "{{ keycloak_admin_password }}"
+        KC_DB = "postgres"
+        KC_HTTP_ENABLED = "true"
+        KC_DB_USERNAME = "postgres"
+        KC_DB_PASSWORD = "{{ psql_password }}"
+      }
+      resources {
+        cpu    = 400
+        memory = 4096
+      }
+    }
+  }
+}

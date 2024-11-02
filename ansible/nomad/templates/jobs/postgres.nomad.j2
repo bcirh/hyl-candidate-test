@@ -1,0 +1,47 @@
+variable "version" {
+  type        = string
+  description = "Psql version"
+  default     = "17"
+}
+
+job "psql-keycloak" {
+  datacenters = ["{{ data_center_name }}"]
+  group "db" {
+
+    network {
+      port "tcp" {
+        static = 5432
+      }
+    }
+
+    service {
+      name = "psql-keycloak"
+      port = "tcp"
+      tags = []
+      check {
+        name     = "alive"
+        type     = "tcp"
+        interval = "10s"
+        timeout  = "2s"
+      }
+    }
+
+    task "psql-keycloak" {
+      driver = "docker"
+
+      config {
+        image = "postgres:${var.version}"
+        ports = ["tcp"]
+      }
+      env {
+        POSTGRES_PASSWORD = "{{ psql_password }}"
+        POSTGRES_DB = "keycloak"
+      }
+
+      resources {
+        cpu    = 500
+        memory = 4096
+      }
+    }
+  }
+}
