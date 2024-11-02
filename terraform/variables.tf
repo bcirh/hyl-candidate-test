@@ -43,6 +43,19 @@ variable "vm_size" {
 
 variable "ip_restrictions" {
   type = list(any)
+  default = [
+    {
+      name                       = "allowSshHttpHttps"
+      priority                   = "200"
+      direction                  = "Inbound"
+      access                     = "Allow"
+      protocol                   = "*"
+      source_port_range          = "22,80,443"
+      destination_port_range     = "*"
+      source_address_prefix      = "*"
+      destination_address_prefix = "*"
+    }
+  ]
 }
 
 variable "ssh_public_key" {
