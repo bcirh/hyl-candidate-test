@@ -1,3 +1,10 @@
+- name: Copy consul-ui.hcl
+  copy:
+    src: consul-ui.hcl
+    dest: /etc/consul.d/consul-ui.hcl
+  notify: Restart Consul
+  become: yes
+
 - name: Consul template configuration file
   template:
     src: consul.hcl.j2
