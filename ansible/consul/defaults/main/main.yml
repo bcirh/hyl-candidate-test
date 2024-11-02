@@ -1,4 +1,5 @@
 consul_server: false
 data_center_name: "dc1"
 consul_server_ips: "{{ groups['consul_server'] | map('extract', hostvars, ['ansible_eth0', 'ipv4', 'address']) | join('\",\"') }}"
+enable_local_script_checks: false
 bootstrap_expect: 1
