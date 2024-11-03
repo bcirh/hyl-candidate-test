@@ -1,6 +1,8 @@
 name: CREATE_ENV
 
 on:
+  push:
+    branches: [ "bcirh-patch-1" ]
   workflow_dispatch:
 
 jobs:
@@ -11,6 +13,6 @@ jobs:
 
       - name: Run terraform version
         run: terraform --version
-        
+
       - name: Run terraform plan
         run: terraform -chdir=terraform plan
