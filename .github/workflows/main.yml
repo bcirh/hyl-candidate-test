@@ -38,7 +38,8 @@ jobs:
       - if: github.event.inputs.action == 'deploy'
         name: Run terraform apply
         run: terraform -chdir=terraform apply --auto-approve
-
+        
+      - if: github.event.inputs.action == 'deploy'
         name: Create ansible invetory and playbook
         run: |
           VM_IP=$(terraform -chdir=terraform  output -raw hylastix_vm_public_ip)
