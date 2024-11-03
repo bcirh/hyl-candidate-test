@@ -1,8 +1,6 @@
 name: CREATE_ENV
 
 on:
-  push:
-    branches: [ "bcirh-patch-1" ]
   workflow_dispatch:
     inputs:
       action:
