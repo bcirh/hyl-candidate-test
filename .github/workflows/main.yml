@@ -38,7 +38,31 @@ jobs:
       - if: github.event.inputs.action == 'deploy'
         name: Run terraform apply
         run: terraform -chdir=terraform apply --auto-approve
-### Ansible step go here
+
+        name: Create ansible invetory and playbook
+        run: |
+          VM_IP=$(terraform -chdir=terraform  output -raw hylastix_vm_public_ip)
+          cat > ansible/inventory.yml << EOF
+          consul_server:
+            hosts:
+              hylvm:
+                ansible_host: $VM_IP
+                ansible_user: adminuser
+                ansible_ssh_private_key_file: ${{ github.workspace }}/id_rsa.pub
+                consul_server: true
+          EOF
+          cat > ansible/playbook.yml << EOF
+          - name: Install Consul and Nomad
+            hosts:
+              - all:
+            roles:
+              - consul
+              - nomad
+          EOF
+          echo "Read inventory.yml"
+          cat ansible/inventory.yml
+          echo "Read playbook.yml"
+          cat ansible/playbook.yml
       - if: github.event.inputs.action == 'destroy'
         name: Run terraform destroy
         run: terraform -chdir=terraform destroy --auto-approve
