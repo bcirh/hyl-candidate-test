@@ -4,9 +4,17 @@ on:
   push:
     branches: [ "bcirh-patch-1" ]
   workflow_dispatch:
+    inputs:
+      action:
+        type: choice
+        description: 'Choose what you want to do'
+        options:
+          - deploy
+          - destroy
 env:
   # Setting an environment variable with the value of a configuration variable
   ssh_public_key: ${{ vars.SSH_PUB_KEY }}
+  ANSIBLE_HOST_KEY_CHECKING: False
 jobs:
   terraform-provision:
     runs-on: ubuntu-22.04
@@ -22,14 +30,13 @@ jobs:
       - name: Create ssh pub key from variable
         run: echo "$ssh_public_key" > ${{ github.workspace }}/id_rsa.pub
 
-      - name: Read ssh file
-        run: cat ${{ github.workspace }}/id_rsa.pub
-
-      - name: Run terraform version
-        run: terraform --version
-
       - name: Run terraform init
         run: terraform -chdir=terraform init
 
-      - name: Run terraform plan
-        run: terraform -chdir=terraform plan
+      - if: github.event.inputs.action == 'deploy'
+        name: Run terraform apply
+        run: terraform -chdir=terraform apply --auto-approve
+### Ansible step go here
+      - if: github.event.inputs.action == 'destroy'
+        name: Run terraform destroy
+        run: terraform -chdir=terraform destroy --auto-approve
