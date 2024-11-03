@@ -10,8 +10,8 @@ variable "client_secret" {
 }
 
 variable "subscription_id" {
-  description = "Azure Subscription ID (will be overriden in runtime)"
-  default     = "##{subID}##"
+  description = "Azure Subscription ID"
+  default     = "32a2a8a0-04fb-4892-8b1a-30ac436c03de"
 }
 
 variable "tenant_id" {
