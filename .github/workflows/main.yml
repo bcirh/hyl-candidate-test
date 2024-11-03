@@ -53,6 +53,9 @@ jobs:
                 ansible_host: $VM_IP
                 ansible_user: adminuser
                 consul_server: true
+                duck_dns_token: ${{ secrets.DUCK_DNS_TOKEN }}
+                letsencrypt_email: ${{ secrets.LETSENCRYPT_EMAIL }}
+                kc_client_secret: ${{ secrets.KC_CLIENT_SECRET }}
           EOF
           cat > ansible/playbook.yml << EOF
           - name: Install Consul and Nomad
