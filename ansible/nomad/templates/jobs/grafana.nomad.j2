@@ -22,7 +22,7 @@ job "grafana" {
             "traefik.enable=true",
             "traefik.http.routers.grafana.entrypoints=https",
             "traefik.http.routers.grafana.tls.certresolver=letsencrypt",
-            "traefik.http.routers.grafana.rule=Host(`{{ grafana_url }}`)"
+            "traefik.http.routers.grafana.rule=Host(`{{ grafana_url }}.{{ top_domain }}`)"
           ]
       check {
         type     = "http"
@@ -43,18 +43,19 @@ job "grafana" {
       }
 
       env {
+        GF_SERVER_ROOT_URL = "https://{{ grafana_url }}.{{ top_domain }}"
         GF_AUTH_GENERIC_OAUTH_ENABLED = "true"
         GF_AUTH_GENERIC_OAUTH_NAME = "Keycloak-OAuth"
-        GF_AUTH_GENERIC_OAUTH_SIGN_UP = "true"
-        GF_AUTH_GENERIC_OAUTH_CLIENT_ID = "{{ kc_client }}"
+        GF_AUTH_GENERIC_OAUTH_ALLOW_SIGN_UP = "true"
+        GF_AUTH_GENERIC_OAUTH_CLIENT_ID = "{{ kc_client_name }}"
         GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET = "{{ kc_client_secret }}"
         GF_AUTH_GENERIC_OAUTH_SCOPES = "openid email profile offline_access roles"
         GF_AUTH_GENERIC_OAUTH_EMAIL_ATTRIBUTE_PATH = "email"
         GF_AUTH_GENERIC_OAUTH_LOGIN_ATTRIBUTE_PATH = "username"
         GF_AUTH_GENERIC_OAUTH_NAME_ATTRIBUTE_PATH = "full_name"
-        GF_AUTH_GENERIC_OAUTH_AUTH_URL = "https://{{ kc_url }}/realms/{{ kc_realm }}/protocol/openid-connect/auth"
-        GF_AUTH_GENERIC_OAUTH_TOKEN_URL = "https://{{ kc_url }}/realms/{{ kc_realm }}/protocol/openid-connect/token"
-        GF_AUTH_GENERIC_OAUTH_API_URL = "https://{{ kc_url }}/realms/{{ kc_realm }}/protocol/openid-connect/userinfo"
+        GF_AUTH_GENERIC_OAUTH_AUTH_URL = "https://{{ kc_url }}.{{ top_domain }}/realms/{{ kc_realm_name }}/protocol/openid-connect/auth"
+        GF_AUTH_GENERIC_OAUTH_TOKEN_URL = "https://{{ kc_url }}.{{ top_domain }}/realms/{{ kc_realm_name }}/protocol/openid-connect/token"
+        GF_AUTH_GENERIC_OAUTH_API_URL = "https://{{ kc_url }}.{{ top_domain }}/realms/{{ kc_realm_name }}/protocol/openid-connect/userinfo"
         GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_PATH = "contains(roles[*], 'admin') && 'Admin' || contains(roles[*], 'editor') && 'Editor' || 'Viewer'"
       }
 

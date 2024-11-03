@@ -20,7 +20,7 @@ job "keycloak" {
             "traefik.enable=true",
             "traefik.http.routers.keycloak.entrypoints=https",
             "traefik.http.routers.keycloak.tls.certresolver=letsencrypt",
-            "traefik.http.routers.keycloak.rule=Host(`{{ kc_url }}`)"
+            "traefik.http.routers.keycloak.rule=Host(`{{ kc_url }}.{{ top_domain }}`)"
           ]
     }
 

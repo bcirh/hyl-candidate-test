@@ -10,3 +10,29 @@ nomad_ui_label_text_color: white
 psql_password: changeme
 keycloak_admin_user: admin
 keycloak_admin_password: changeme
+duck_dns_token: "define at runtime"
+letsencrypt_email: "define at runtime"
+grafana_url: hyl-grafana
+kc_grafana_client_roles:
+  - admin
+  - editor
+  - viewer
+kc_realm_name: grafana
+kc_client_name: grafana-oauth
+kc_client_secret: "SiRie7mVPdbVuD125GKuPzUfdpzBIVd4" # dummy secret for kc client
+kc_url: hyl-keycloak
+top_domain: duckdns.org
+
+kc_user_grafana_realm:
+  - name: user1
+    password: changeme
+    email: user1@test.ws
+    role: admin
+  - name: user2
+    password: changeme
+    email: user2@test.ws
+    role: editor
+  - name: user3
+    password: changeme
+    email: user3@test.ws
+    role: viewer
