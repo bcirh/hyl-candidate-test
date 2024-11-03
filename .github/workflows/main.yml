@@ -38,9 +38,9 @@ jobs:
       - if: github.event.inputs.action == 'deploy'
         name: Run terraform apply
         run: terraform -chdir=terraform apply --auto-approve
-        
+
       - if: github.event.inputs.action == 'deploy'
-        name: Create ansible invetory and playbook
+        name: Run ansible configuration
         run: |
           VM_IP=$(terraform -chdir=terraform  output -raw hylastix_vm_public_ip)
           cat > ansible/inventory.yml << EOF
@@ -60,10 +60,7 @@ jobs:
               - consul
               - nomad
           EOF
-          echo "Read inventory.yml"
-          cat ansible/inventory.yml
-          echo "Read playbook.yml"
-          cat ansible/playbook.yml
+          ansible-playbook -i ansible/inventory.yml ansible/playbook.yml
       - if: github.event.inputs.action == 'destroy'
         name: Run terraform destroy
         run: terraform -chdir=terraform destroy --auto-approve
