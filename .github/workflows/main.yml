@@ -14,5 +14,8 @@ jobs:
       - name: Run terraform version
         run: terraform --version
 
+      - name: Run terraform init
+        run: terraform -chdir=terraform init
+
       - name: Run terraform plan
         run: terraform -chdir=terraform plan
