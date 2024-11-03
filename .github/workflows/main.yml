@@ -4,7 +4,9 @@ on:
   push:
     branches: [ "bcirh-patch-1" ]
   workflow_dispatch:
-
+env:
+  # Setting an environment variable with the value of a configuration variable
+  ssh_public_key: ${{ vars.SSH_PUB_KEY }}
 jobs:
   terraform-provision:
     runs-on: ubuntu-22.04
@@ -13,11 +15,15 @@ jobs:
       TF_VAR_client_id: ${{ secrets.CLIENT_ID }}
       TF_VAR_client_secret: ${{ secrets.CLIENT_SECRET }}
       TF_VAR_tenant_id: ${{ secrets.TENANT_ID }}
+      TF_VAR_ssh_public_key: ${{ GITHUB_WORKSPACE }}/id_rsa.pub
     steps:
       - uses: actions/checkout@v4
 
-      - name: List env vars
-        run: env
+      - name: Create ssh pub key from variable
+        run: echo "$ssh_public_key" > ${{ GITHUB_WORKSPACE }}/id_rsa.pub
+
+      - name: Read ssh file
+        run: cat ${{ GITHUB_WORKSPACE }}/id_rsa.pub
 
       - name: Run terraform version
         run: terraform --version
