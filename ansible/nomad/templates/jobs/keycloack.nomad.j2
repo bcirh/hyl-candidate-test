@@ -8,12 +8,20 @@ job "keycloak" {
       port "http" {
         static = 8080
       }
+      port "health" {
+        static = 9000
+      }
     }
 
     service {
       name = "keycloak"
       port     = "http"
-      tags = []
+      tags = [
+            "traefik.enable=true",
+            "traefik.http.routers.keycloak.entrypoints=https",
+            "traefik.http.routers.keycloak.tls.certresolver=letsencrypt",
+            "traefik.http.routers.keycloak.rule=Host(`{{ kc_url }}.{{ top_domain }}`)"
+          ]
     }
 
     task "keycloak" {
@@ -27,19 +35,20 @@ job "keycloak" {
           "--hostname-strict", "false",
           "--db-url", "jdbc:postgresql://postgres.service.consul:5432/keycloak"
         ]
-        ports   = ["http"]
+        ports   = ["http","health"]
       }
       env {
         KEYCLOAK_ADMIN = "{{ keycloak_admin_user }}"
         KEYCLOAK_ADMIN_PASSWORD = "{{ keycloak_admin_password }}"
+        KC_HEALTH_ENABLED = "true"
         KC_DB = "postgres"
         KC_HTTP_ENABLED = "true"
         KC_DB_USERNAME = "postgres"
         KC_DB_PASSWORD = "{{ psql_password }}"
       }
       resources {
-        cpu    = 400
-        memory = 4096
+        cpu    = 300
+        memory = 1024
       }
     }
   }

@@ -4,7 +4,7 @@ variable "version" {
   default     = "17"
 }
 
-job "psql-keycloak" {
+job "postgres" {
   datacenters = ["{{ data_center_name }}"]
   group "db" {
 
@@ -15,7 +15,7 @@ job "psql-keycloak" {
     }
 
     service {
-      name = "psql-keycloak"
+      name = "postgres"
       port = "tcp"
       tags = []
       check {
@@ -26,7 +26,7 @@ job "psql-keycloak" {
       }
     }
 
-    task "psql-keycloak" {
+    task "postgres" {
       driver = "docker"
 
       config {
@@ -39,8 +39,8 @@ job "psql-keycloak" {
       }
 
       resources {
-        cpu    = 500
-        memory = 4096
+        cpu    = 300
+        memory = 1024
       }
     }
   }

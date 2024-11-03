@@ -24,4 +24,3 @@
   until: "result.status == 200"
   retries: 20
   delay: 25
-  when: nomad_server|bool

@@ -2,15 +2,15 @@
 #tasks file for nomad
 - name: Download Nomad
   include_tasks: nomad-download.yml
-  when: nomad_server|bool or nomad_agent|bool
 
 - name: Configure Docker
   include_tasks: configure-docker.yml
-  when: nomad_agent|bool
 
 - name: Configure Nomad
   include_tasks: configure-nomad.yml
-  when: nomad_server|bool or nomad_agent|bool
 
 - name: Nomad Job
   include_tasks: nomad-job.yml
+
+- name: Configure Keycloak
+  include_tasks: configure-keycloak.yml

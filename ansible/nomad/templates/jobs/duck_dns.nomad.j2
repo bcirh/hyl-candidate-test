@@ -1,0 +1,27 @@
+job "duck-dns" {
+  datacenters = ["{{ data_center_name }}"]
+  group "dns" {
+
+    network {
+      mode = "host"
+    }
+
+    task "duck-dns" {
+      driver = "docker"
+
+      config {
+        image = "lscr.io/linuxserver/duckdns:latest"
+      }
+      env {
+        SUBDOMAINS = "hyl-consul,{{ grafana_url }},{{ kc_url }},hyl-nomad"
+        TOKEN = "{{ duck_dns_token }}"
+        UPDATE_IP = "ipv4"
+      }
+
+      resources {
+        cpu    = 50
+        memory = 128
+      }
+    }
+  }
+}
