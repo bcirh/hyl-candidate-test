@@ -8,8 +8,16 @@ on:
 jobs:
   terraform-provision:
     runs-on: ubuntu-22.04
+    env:
+      TF_VAR_subscription_id: ${{ secrets.SUBSCRIPTION_ID }}
+      TF_VAR_client_id: ${{ secrets.CLIENT_ID }}
+      TF_VAR_client_secret: ${{ secrets.CLIENT_SECRET }}
+      TF_VAR_tenant_id: ${{ secrets.TENANT_ID }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: List env vars
+        run: env
 
       - name: Run terraform version
         run: terraform --version
@@ -18,9 +26,4 @@ jobs:
         run: terraform -chdir=terraform init
 
       - name: Run terraform plan
-        env: 
-          subid: ${{ secrets.TF_VAR_SUBSCRIPTION_ID }}
-          tenant_id: ${{ secrets.TF_VAR_TENANT_ID }}
-          secret: ${{ secrets.TF_VAR_CLIENT_SECRET }}
-          appId: ${{ secrets.TF_VAR_CLIENT_ID }}
-        run: terraform -chdir=terraform -var="subscription_id=$(subid)" -var="client_id=$(appId)" -var="client_secret=$(secret) -var=tenant_id=$(tenant_id)" plan
+        run: terraform -chdir=terraform plan
