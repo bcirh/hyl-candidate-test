@@ -1,0 +1,88 @@
+- name: Check if KC is available and returning status 200
+  uri:
+    url: http://keycloak.service.consul:9000/health/ready
+  register: result
+  until: "result.status == 200"
+  retries: 20
+  delay: 25
+
+- name: Create or update Keycloak realm
+  community.general.keycloak_realm:
+    auth_client_id: admin-cli
+    auth_keycloak_url: http://keycloak.service.consul:8080
+    auth_realm: master
+    auth_username: "{{ keycloak_admin_user }}"
+    auth_password: "{{ keycloak_admin_password }}"
+    id: "{{ kc_realm_name }}"
+    realm: "{{ kc_realm_name }}"
+    enabled: true
+    state: present
+
+- name: Create or update Keycloak client
+  community.general.keycloak_client:
+    auth_keycloak_url: http://keycloak.service.consul:8080
+    auth_realm: master
+    auth_username: "{{ keycloak_admin_user }}"
+    auth_password: "{{ keycloak_admin_password }}"
+    realm: "{{ kc_realm_name }}"
+    client_id: "{{ kc_client_name }}"
+    protocol: openid-connect
+    public_client: false
+    full_scope_allowed: true
+    implicit_flow_enabled: false
+    standard_flow_enabled: true
+    direct_access_grants_enabled: true
+    root_url: "https://{{ grafana_url }}.{{ top_domain }}"
+    redirect_uris: "https://{{ grafana_url }}.{{ top_domain }}/login/generic_oauth"
+    web_origins: "https://{{ grafana_url }}.{{ top_domain }}"
+    admin_url: "https://{{ grafana_url }}.{{ top_domain }}"
+    base_url: "https://{{ grafana_url }}.{{ top_domain }}"
+    secret: "{{ kc_client_secret }}"
+    state: present
+
+- name: Create a Keycloak client role
+  community.general.keycloak_role:
+    auth_keycloak_url: http://keycloak.service.consul:8080
+    auth_realm: master
+    auth_username: "{{ keycloak_admin_user }}"
+    auth_password: "{{ keycloak_admin_password }}"
+    realm: "{{ kc_realm_name }}"
+    client_id: "{{ kc_client_name }}"
+    name: "{{ item }}"
+    state: present
+  loop: "{{ kc_grafana_client_roles }}"
+
+- name: Create a KC users for Grafana realm
+  community.general.keycloak_user:
+    auth_keycloak_url: http://keycloak.service.consul:8080
+    auth_realm: master
+    auth_username: "{{ keycloak_admin_user }}"
+    auth_password: "{{ keycloak_admin_password }}"
+    realm: "{{ kc_realm_name }}"
+    username: "{{ item.name }}"
+    firstName: "{{ item.name }}"
+    lastName: "{{ item.name }}"
+    email: "{{ item.email }}"
+    enabled: true
+    emailVerified: false
+    credentials:
+      - type: password
+        value: "{{ item.password }}"
+        temporary: false
+    state: present
+  loop: "{{ kc_user_grafana_realm }}"
+
+- name: Map a client role to a user
+  community.general.keycloak_user_rolemapping:
+    auth_keycloak_url: http://keycloak.service.consul:8080
+    auth_realm: master
+    auth_client_id: admin-cli
+    auth_username: "{{ keycloak_admin_user }}"
+    auth_password: "{{ keycloak_admin_password }}"
+    realm: "{{ kc_realm_name }}"
+    client_id: "{{ kc_client_name }}"
+    target_username: "{{ item.name }}"
+    roles:
+      - name: "{{ item.role }}"
+    state: present
+  loop: "{{ kc_user_grafana_realm }}"

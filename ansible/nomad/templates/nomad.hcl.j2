@@ -1,0 +1,34 @@
+data_dir  = "/opt/nomad/data"
+bind_addr = "0.0.0.0"
+datacenter = "{{ data_center_name }}"
+
+server {
+  enabled          = true
+  bootstrap_expect = {{ bootstrap_expect }}
+}
+
+ui {
+  enabled = true
+  label {
+    text             = "{{ data_center_name }}"
+    background_color = "{{ nomad_ui_label_backgroung_color }}"
+    text_color       = "{{ nomad_ui_label_text_color }}"
+  }
+}
+
+client {
+  enabled = true
+}
+
+{% if docker_privileged_mode|bool %}
+plugin "docker" {
+  config {
+    allow_privileged = true
+  }
+}
+{% endif %}
+
+consul {
+  address = "127.0.0.1:8500"
+  tags = ["traefik.enable=true", "traefik.http.routers.nomad-client.tls.certresolver=letsencrypt", "traefik.http.routers.nomad-client.entrypoints=https", "traefik.http.routers.nomad-client.service=nomad-client", "traefik.http.routers.nomad-client.rule=Host(`hyl-nomad.duckdns.org`)"]
+}

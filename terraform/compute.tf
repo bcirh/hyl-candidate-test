@@ -5,7 +5,7 @@ resource "azurerm_linux_virtual_machine" "hylastix_minimal_vm" {
   size                = var.vm_size
   admin_username      = "adminuser"
   network_interface_ids = [
-    azurerm_network_interface.monitoring_nic.id,
+    azurerm_network_interface.hylastix_minimal_nic.id,
   ]
 
   admin_ssh_key {
