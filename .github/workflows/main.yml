@@ -55,7 +55,7 @@ jobs:
           cat > ansible/playbook.yml << EOF
           - name: Install Consul and Nomad
             hosts:
-              - all:
+              - all
             roles:
               - consul
               - nomad
