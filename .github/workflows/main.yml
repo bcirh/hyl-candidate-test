@@ -18,4 +18,9 @@ jobs:
         run: terraform -chdir=terraform init
 
       - name: Run terraform plan
+        env: 
+          TF_VAR_SUBSCRIPTION_ID: ${{ secrets.TF_VAR_SUBSCRIPTION_ID }}
+          TF_VAR_TENANT_ID: ${{ secrets.TF_VAR_TENANT_ID }}
+          TF_VAR_CLIENT_SECRET: ${{ secrets.TF_VAR_CLIENT_SECRET }}
+          TF_VAR_CLIENT_ID: ${{ secrets.TF_VAR_CLIENT_ID }}
         run: terraform -chdir=terraform plan
