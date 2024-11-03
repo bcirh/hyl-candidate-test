@@ -1,5 +1,3 @@
-#nomad_server: false
-#nomad_agent: false
 data_center_name: "dc1"
 bootstrap_expect: 1
 docker_sock_enabled: false
@@ -19,7 +17,7 @@ kc_grafana_client_roles:
   - viewer
 kc_realm_name: grafana
 kc_client_name: grafana-oauth
-kc_client_secret: "SiRie7mVPdbVuD125GKuPzUfdpzBIVd4" # dummy secret for kc client
+kc_client_secret: "define at runtime"
 kc_url: hyl-keycloak
 top_domain: duckdns.org
 
