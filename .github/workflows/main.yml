@@ -22,3 +22,6 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run terraform version
         run: terraform --version
+
+      - name: Run terraform version
+        run: terraform -chdir=terraform plan
