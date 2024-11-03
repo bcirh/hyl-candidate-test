@@ -1,0 +1,44 @@
+name: CREATE_ENV
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        type: choice
+        description: 'Choose what you want to do'
+        options:
+          - deploy
+          - destroy
+env:
+  # Setting an environment variable with the value of a configuration variable
+  ssh_public_key: ${{ vars.SSH_PUB_KEY }}
+  ANSIBLE_HOST_KEY_CHECKING: False
+jobs:
+  terraform-provision:
+    runs-on: ubuntu-22.04
+    env:
+      TF_VAR_subscription_id: ${{ secrets.SUBSCRIPTION_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
+      TF_VAR_client_id: ${{ secrets.CLIENT_ID }}
+      ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      TF_VAR_client_secret: ${{ secrets.CLIENT_SECRET }}
+      ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+      TF_VAR_tenant_id: ${{ secrets.TENANT_ID }}
+      ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
+      TF_VAR_ssh_public_key: ${{ github.workspace }}/id_rsa.pub
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create ssh pub key from variable
+        run: echo "$ssh_public_key" > ${{ github.workspace }}/id_rsa.pub
+
+      - name: Run terraform init
+        run: terraform -chdir=terraform init
+
+      - if: github.event.inputs.action == 'deploy'
+        name: Run terraform apply
+        run: terraform -chdir=terraform apply --auto-approve
+### Ansible step go here
+      - if: github.event.inputs.action == 'destroy'
+        name: Run terraform destroy
+        run: terraform -chdir=terraform destroy --auto-approve
