@@ -19,8 +19,8 @@ jobs:
 
       - name: Run terraform plan
         env: 
-          TF_VAR_SUBSCRIPTION_ID: ${{ secrets.TF_VAR_SUBSCRIPTION_ID }}
-          TF_VAR_TENANT_ID: ${{ secrets.TF_VAR_TENANT_ID }}
-          TF_VAR_CLIENT_SECRET: ${{ secrets.TF_VAR_CLIENT_SECRET }}
-          TF_VAR_CLIENT_ID: ${{ secrets.TF_VAR_CLIENT_ID }}
-        run: terraform -chdir=terraform plan
+          subid: ${{ secrets.TF_VAR_SUBSCRIPTION_ID }}
+          tenant_id: ${{ secrets.TF_VAR_TENANT_ID }}
+          secret: ${{ secrets.TF_VAR_CLIENT_SECRET }}
+          appId: ${{ secrets.TF_VAR_CLIENT_ID }}
+        run: terraform -chdir=terraform -var="subscription_id=$(subid)" -var="client_id=$(appId)" -var="client_secret=$(secret) -var=tenant_id=$(tenant_id)" plan
