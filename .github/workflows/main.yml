@@ -11,6 +11,7 @@ on:
           - destroy
 env:
   ssh_public_key: ${{ vars.SSH_PUB_KEY }}
+  ssh_privete_key: ${{ secrets.PRIVATE_SSH_KEY }}
 
 jobs:
   provision-and-configure:
@@ -28,8 +29,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Create ssh pub key from variable
-        run: echo "$ssh_public_key" > ${{ github.workspace }}/id_rsa.pub
+      - name: Create ssh pub/priv key from variable
+        run: |
+          echo "$ssh_public_key" > ${{ github.workspace }}/id_rsa.pub
+          echo "$ssh_public_key" > ${{ github.workspace }}/id_rsa
 
       - name: Run terraform init
         run: terraform -chdir=terraform init
@@ -49,7 +52,7 @@ jobs:
               hylvm:
                 ansible_host: $VM_IP
                 ansible_user: adminuser
-                ansible_ssh_private_key_file: ${{ github.workspace }}/id_rsa.pub
+                ansible_ssh_private_key_file: ${{ github.workspace }}/id_rsa
                 consul_server: true
           EOF
           cat > ansible/playbook.yml << EOF
