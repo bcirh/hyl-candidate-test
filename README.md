@@ -28,7 +28,7 @@ graph  LR
 * Implement Azure availability zones with terraform
 * Enable persistant sotorage for Nomad cluster with managed disk or with CSI
 * Move Keycloak ansible task into separate role
-* Dynamically add nsg rule for github actions runner
+* Dynamically add/remove nsg rule for github actions runner
  
 ## Pre-requisites
 * [ansible](https://docs.ansible.com/ansible/latest/installation_guide/installation_distros.html)
@@ -80,3 +80,5 @@ consul_server:
 * export ANSIBLE_HOST_KEY_CHECKING=False
 * consul_server_ips Ansible variable will look for server group named **consul_server** in inventory file to fill proper IPs for retry_join stanza in Consul configuration
 * Environment is ephemeral 
+* Environment depends on cloudns (Dynamic DNS). Cron job is checking for IP change every 3 minutes.
+* If 404 code emerges use https when typing url(s)
