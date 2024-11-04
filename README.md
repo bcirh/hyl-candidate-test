@@ -26,6 +26,7 @@ graph  LR
 * Improving github actions to have clear separation of jobs, instead having only one job
 * Expanding terraform code to deploy full cluster instead single node cluster
 * Implement Azure availability zones with terraform
+* Enable persistant sotorage for Nomad cluster with managed disk or with CSI
  
 ## Pre-requisites
 * [ansible](https://docs.ansible.com/ansible/latest/installation_guide/installation_distros.html)
