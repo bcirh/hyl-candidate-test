@@ -28,12 +28,13 @@ graph  LR
 * Implement Azure availability zones with terraform
 * Enable persistant sotorage for Nomad cluster with managed disk or with CSI
 * Move Keycloak ansible task into separate role
+* Dynamically add nsg rule for github actions runner
  
 ## Pre-requisites
 * [ansible](https://docs.ansible.com/ansible/latest/installation_guide/installation_distros.html)
 * [Terraform](https://developer.hashicorp.com/terraform/install?product_intent=terraform)
 * Azure Service Principal
-* Azure Storage Account for storing state file
+* Azure Storage Account for storing the state file
 
 Ansible Role(s) Variables
 --------------
@@ -48,7 +49,7 @@ Ansible Role(s) Variables
 | docker_privileged_mode | Default = false | Enable docker to run in privileged mode |
 | nomad_ui_label_backgroung_color | Default = "purple" | Set label background color in Nomad UI | 
 | nomad_ui_label_text_color | Default = "white" | Set label color in Nomad UI |
-| psql_password | Default = "changeme" | Psql Server password **Please change the value for the deployment** |
+| psql_password | Default = "changeme" | Psql Server password |
 | keycloak_admin_user | Default = "admin" | Set Keycloak admin user |
 | keycloak_admin_password | Default = "changeme" | Set Keycloak admin user password |
 | kc_grafana_client_roles | Default = ['admin','editor','viewer'] | Keycloak client roles for Grafana |
