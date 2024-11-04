@@ -74,5 +74,5 @@ consul_server:
 ## Notes and Tips
 * export ANSIBLE_HOST_KEY_CHECKING=False
 * consul_server_ips Ansible variable will look for server group named **consul_server** in inventory file to fill proper IPs for retry_join stanza in Consul configuration
-* This code example is heavily reliant on duckdns.org for dynamic dns features. If duckdns is not working this code example will not work. Since duckdns.org is free service **you get what you paid for**. It's dns meme goes here.
+* This code example is heavily reliant on duckdns.org for dynamic dns features. If duckdns is not working this code example will not work. Since duckdns.org is free service **you get what you paid for**. "It's dns", meme goes here.
 * Environment is ephemeral 
