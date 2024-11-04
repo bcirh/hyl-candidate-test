@@ -55,7 +55,7 @@ Ansible Role(s) Variables
 | kc_client_secret | Default = "dummy string" | Keycloak client secret |
 | kc_url | Default = "hyl-keycloak" | Keycloak URL |
 | grafana_url | Default = "hyl-grafana" | Grafana URL |
-| kc_user_grafana_realm | Default = "" | Keycloak client dummy users with mapped client roles |
+| kc_user_grafana_realm | Default = kc_user_grafana_realm:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-name: user1<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;password: changeme<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;role: viewer | Keycloak client dummy users with mapped client roles |
 | duck_dns_token | Default = "dummy string" | Token for Duckdns to update ip of dns records |
 | letsencrypt_email | Default = "dummy string" | Email to allow traefik to generate let's encrypt certificates |
 | top_domain | Default = "duckdns.org" | Duckdns domain |
