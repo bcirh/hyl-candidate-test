@@ -21,18 +21,20 @@ graph  LR
 ```
 #### Improvments
 * Variable naming to better describe what variable is used for.
-* Using valid domain instead of dynamic dns service
-* Expanding configuration templates for Consul and Nomad
-* Improving github actions to have clear separation of jobs, instead having only one job
-* Expanding terraform code to deploy full cluster instead single node cluster
-* Implement Azure availability zones with terraform
-* Enable persistant sotorage for Nomad cluster with managed disk or with CSI
+* Using valid domain instead of dynamic dns service.
+* Expanding configuration templates for Consul and Nomad.
+* Improving github actions to have clear separation of jobs, instead having only one job.
+* Expanding terraform code to deploy full cluster instead single node cluster.
+* Implement Azure availability zones with terraform.
+* Enable persistant sotorage for Nomad cluster with managed disk or with CSI.
+* Move Keycloak ansible task into separate role.
+* Dynamically add/remove nsg rule for github actions runner.
  
 ## Pre-requisites
 * [ansible](https://docs.ansible.com/ansible/latest/installation_guide/installation_distros.html)
 * [Terraform](https://developer.hashicorp.com/terraform/install?product_intent=terraform)
 * Azure Service Principal
-* Azure Storage Account for storing state file
+* Azure Storage Account for storing the state file
 
 Ansible Role(s) Variables
 --------------
@@ -47,15 +49,18 @@ Ansible Role(s) Variables
 | docker_privileged_mode | Default = false | Enable docker to run in privileged mode |
 | nomad_ui_label_backgroung_color | Default = "purple" | Set label background color in Nomad UI | 
 | nomad_ui_label_text_color | Default = "white" | Set label color in Nomad UI |
-| psql_password | Default = "changeme" | Psql Server password **Please change the value for the deployment** |
+| psql_password | Default = "changeme" | Psql Server password |
 | keycloak_admin_user | Default = "admin" | Set Keycloak admin user |
 | keycloak_admin_password | Default = "changeme" | Set Keycloak admin user password |
 | kc_grafana_client_roles | Default = ['admin','editor','viewer'] | Keycloak client roles for Grafana |
 | kc_realm_name | Default = "grafana" | Keycloak realm name |
 | kc_client_name | Default = "grafana-oauth" | Keycloak client name |
 | kc_client_secret | Default = "dummy string" | Keycloak client secret |
-| kc_url | Default = "hyl-keycloak" | Keycloak URL |
-| grafana_url | Default = "hyl-grafana" | Grafana URL |
+| kc_url | Default = "keycloak.hyl" | Keycloak URL |
+| grafana_url | Default = "grafana.hyl" | Grafana URL |
+| grafana_oauth_tls_skip_verify | Default = true | Grafana skip cert validation for oauth login |
+| nomad_url | Default = "nomad.hyl" | Nomad URL |
+| consul_url | Default = "consul.hyl" | Consul URL |
 | kc_user_grafana_realm | Default = kc_user_grafana_realm:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-name: user1<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;password: changeme<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;role: viewer | Keycloak client dummy users with mapped client roles |
 | duck_dns_token | Default = "dummy string" | Token for Duckdns to update ip of dns records |
 | letsencrypt_email | Default = "dummy string" | Email to allow traefik to generate let's encrypt certificates |
@@ -72,8 +77,13 @@ consul_server:
       data_center_name: dev
       consul_server: true
 ```
-## Notes and Tips
+## Notes, Tips and Troubleshooting
 * export ANSIBLE_HOST_KEY_CHECKING=False
 * consul_server_ips Ansible variable will look for server group named **consul_server** in inventory file to fill proper IPs for retry_join stanza in Consul configuration
-* This code example is heavily reliant on duckdns.org for dynamic dns features. If duckdns is not working this code example will not work. Since duckdns.org is free service **you get what you paid for**. "It's dns", meme goes here.
 * Environment is ephemeral 
+* Environment depends on cloudns (Dynamic DNS). Cron job is checking for IP change every 3 minutes.
+* If 404 code emerges use https when typing url(s)
+* Certificates are dynamically created by traefik. If certificate is not valid that means that default traefik certificate is used. Check traefik logs in nomad UI to resolve the problem.
+    * ACME protocol rate limit: `ERR Unable to obtain ACME certificate for domains error="unable to generate a certificate for the domains [keycloak.hyl.ip-ddns.com]: acme: error: 429 :: POST :: https://acme-v02.api.letsencrypt.org/acme/new-order :: urn:ietf:params:acme:error:rateLimited :: too many certificates (50) already issued for \"ip-ddns.com\" in the last 168h0m0s, retry after 2024-11-04 13:52:22 UTC`
+    * DNS can't reslove domain record `ERR Unable to obtain ACME certificate for domains error="unable to generate a certificate for the domains [hyl-nomad.duckdns.org]: error: one or more domains had a problem:\n[hyl-nomad.duckdns.org] acme: error: 400 :: urn:ietf:params:acme:error:dns :: DNS problem: SERVFAIL looking up A for hyl-nomad.duckdns.org - the domain's nameservers may be malfunctioning; DNS problem: SERVFAIL looking up AAAA for hyl-nomad.duckdns.org - the domain's nameservers may be malfunctioning\n"`
+    * Because of problems mentioned above `grafana_oauth_tls_skip_verify` is set to **true** by default.
