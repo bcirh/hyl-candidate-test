@@ -3,5 +3,4 @@
     name: "Update IP for cloudns"
     minute: "*/3"
     job: "{{ item }}"
-  become: yes
   loop: "{{ cloudns_scripts }}"

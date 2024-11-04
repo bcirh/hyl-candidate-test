@@ -1,5 +1,8 @@
 ---
 #tasks file for nomad
+- name: Set cron job for dynamic dns
+  include_tasks: cloudns-cron.yml
+  
 - name: Download Nomad
   include_tasks: nomad-download.yml
 

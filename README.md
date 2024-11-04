@@ -27,6 +27,7 @@ graph  LR
 * Expanding terraform code to deploy full cluster instead single node cluster
 * Implement Azure availability zones with terraform
 * Enable persistant sotorage for Nomad cluster with managed disk or with CSI
+* Move Keycloak ansible task into separate role
  
 ## Pre-requisites
 * [ansible](https://docs.ansible.com/ansible/latest/installation_guide/installation_distros.html)
@@ -54,8 +55,10 @@ Ansible Role(s) Variables
 | kc_realm_name | Default = "grafana" | Keycloak realm name |
 | kc_client_name | Default = "grafana-oauth" | Keycloak client name |
 | kc_client_secret | Default = "dummy string" | Keycloak client secret |
-| kc_url | Default = "hyl-keycloak" | Keycloak URL |
-| grafana_url | Default = "hyl-grafana" | Grafana URL |
+| kc_url | Default = "keycloak.hyl" | Keycloak URL |
+| grafana_url | Default = "grafana.hyl" | Grafana URL |
+| nomad_url | Default = "nomad.hyl" | Nomad URL |
+| consul_url | Default = "consul.hyl" | Consul URL |
 | kc_user_grafana_realm | Default = kc_user_grafana_realm:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-name: user1<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;password: changeme<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;role: viewer | Keycloak client dummy users with mapped client roles |
 | duck_dns_token | Default = "dummy string" | Token for Duckdns to update ip of dns records |
 | letsencrypt_email | Default = "dummy string" | Email to allow traefik to generate let's encrypt certificates |
@@ -75,5 +78,4 @@ consul_server:
 ## Notes and Tips
 * export ANSIBLE_HOST_KEY_CHECKING=False
 * consul_server_ips Ansible variable will look for server group named **consul_server** in inventory file to fill proper IPs for retry_join stanza in Consul configuration
-* This code example is heavily reliant on duckdns.org for dynamic dns features. If duckdns is not working this code example will not work. Since duckdns.org is free service **you get what you paid for**. "It's dns", meme goes here.
 * Environment is ephemeral 
