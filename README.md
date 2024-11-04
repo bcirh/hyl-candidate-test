@@ -19,10 +19,19 @@ graph  LR
   class client plain;
   class cluster cluster;
 ```
+#### Improvments
+* Variable naming to better describe what variable is used for.
+* Using valid domain instead of dynamic dns service
+* Expanding configuration templates for Consul and Nomad
+* Improving github actions to have clear separation of jobs, instead having only one job
+* Expanding terraform code to deploy full cluster instead single node cluster
+* Implement Azure availability zones with terraform
+ 
 ## Pre-requisites
 * [ansible](https://docs.ansible.com/ansible/latest/installation_guide/installation_distros.html)
 * [Terraform](https://developer.hashicorp.com/terraform/install?product_intent=terraform)
 * Azure Service Principal
+* Azure Storage Account for storing state file
 
 Ansible Role(s) Variables
 --------------
@@ -56,10 +65,14 @@ Ansible Role(s) Variables
 ```
 consul_server:
   hosts:
-    51.144.234.12:
+    hylvm:
+      ansible_host: xxx.xxx.xxx.xxx
       ansible_user: adminuser
       data_center_name: dev
       consul_server: true
 ```
 ## Notes and Tips
 * export ANSIBLE_HOST_KEY_CHECKING=False
+* consul_server_ips Ansible variable will look for server group named **consul_server** in inventory file to fill proper IPs for retry_join stanza in Consul configuration
+* This code example is heavily reliant on duckdns.org for dynamic dns features. If duckdns is not working this code example will not work. Since duckdns.org is free service **you get what you paid for**. It's dns meme goes here.
+* Environment is ephemeral 
