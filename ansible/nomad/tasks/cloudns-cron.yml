@@ -1,6 +1,6 @@
 - name: Update IP for cloudns every hour"
   ansible.builtin.cron:
-    name: "Update IP for cloudns"
+    name: "{{ item.name }}"
     minute: "*/3"
-    job: "{{ item }}"
+    job: "{{ item.script }}"
   loop: "{{ cloudns_scripts }}"

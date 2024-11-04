@@ -39,7 +39,11 @@ nomad_url: nomad.hyl
 consul_url: consul.hyl
 
 cloudns_scripts:
-  - wget -q --read-timeout=0.0 --waitretry=5 --tries=400 --background https://ipv4.cloudns.net/api/dynamicURL/?q=ODMxMzY2MDo1NDM0NzYyNjU6NWJlZjE5OWMzNDM3NTkwY2FhZWI4YmFiYTRiYThiODQwYmRhNWVjZDBiYjVhYmFkOGZkNTE2MzE2ZWY4OWZjYw
-  - wget -q --read-timeout=0.0 --waitretry=5 --tries=400 --background https://ipv4.cloudns.net/api/dynamicURL/?q=ODMxMzY2MDo1NDM0NzYzMDU6MzNiNmQzMGRhMGUyOTZmNmM2YzNiOGM3ODNjMWFkMzVlODBiMDExZDM0NTBlMjI5OWRiMTQ1ZDU4ODFiMGU1MA
-  - wget -q --read-timeout=0.0 --waitretry=5 --tries=400 --background https://ipv4.cloudns.net/api/dynamicURL/?q=ODMxMzY2MDo1NDM0NzYzNjU6NmVlOTk5YTkxM2VmYzg1MmU5NjA2ODEwYTBmMjM0ZDg4MTNiN2EzOGYwZjgzYzY4NGQxOWJiYmIzMWY5ZjQ5NA
-  - wget -q --read-timeout=0.0 --waitretry=5 --tries=400 --background https://ipv4.cloudns.net/api/dynamicURL/?q=ODMxMzY2MDo1NDM0NzY0MDA6NzM1Zjc0YjA0NTQwZjRjNmE3YjMwODRlYzEwZWIzODM0YzIzZTI0YTc4YjA3YTYwOTA1YWJiNTMyYTdhN2M0Nw
+  - name: nomad
+    script: wget -q --read-timeout=0.0 --waitretry=5 --tries=400 --background https://ipv4.cloudns.net/api/dynamicURL/?q=ODMxMzY2MDo1NDM0NzYyNjU6NWJlZjE5OWMzNDM3NTkwY2FhZWI4YmFiYTRiYThiODQwYmRhNWVjZDBiYjVhYmFkOGZkNTE2MzE2ZWY4OWZjYw
+  - name: consul
+    script: wget -q --read-timeout=0.0 --waitretry=5 --tries=400 --background https://ipv4.cloudns.net/api/dynamicURL/?q=ODMxMzY2MDo1NDM0NzYzMDU6MzNiNmQzMGRhMGUyOTZmNmM2YzNiOGM3ODNjMWFkMzVlODBiMDExZDM0NTBlMjI5OWRiMTQ1ZDU4ODFiMGU1MA
+  - name: grafana
+    script: wget -q --read-timeout=0.0 --waitretry=5 --tries=400 --background https://ipv4.cloudns.net/api/dynamicURL/?q=ODMxMzY2MDo1NDM0NzYzNjU6NmVlOTk5YTkxM2VmYzg1MmU5NjA2ODEwYTBmMjM0ZDg4MTNiN2EzOGYwZjgzYzY4NGQxOWJiYmIzMWY5ZjQ5NA
+  - name: keycloak
+    script: wget -q --read-timeout=0.0 --waitretry=5 --tries=400 --background https://ipv4.cloudns.net/api/dynamicURL/?q=ODMxMzY2MDo1NDM0NzY0MDA6NzM1Zjc0YjA0NTQwZjRjNmE3YjMwODRlYzEwZWIzODM0YzIzZTI0YTc4YjA3YTYwOTA1YWJiNTMyYTdhN2M0Nw
