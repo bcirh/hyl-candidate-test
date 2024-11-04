@@ -10,11 +10,11 @@ on:
           - deploy
           - destroy
 env:
-  # Setting an environment variable with the value of a configuration variable
   ssh_public_key: ${{ vars.SSH_PUB_KEY }}
   ANSIBLE_HOST_KEY_CHECKING: False
+
 jobs:
-  terraform-provision:
+  provision-and-configure:
     runs-on: ubuntu-22.04
     env:
       TF_VAR_subscription_id: ${{ secrets.SUBSCRIPTION_ID }}
@@ -28,8 +28,11 @@ jobs:
       TF_VAR_ssh_public_key: ${{ github.workspace }}/id_rsa.pub
     steps:
       - uses: actions/checkout@v4
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.PRIVATE_SSH_KEY }}
 
-      - name: Create ssh pub key from variable
+      - name: Create ssh pub/priv key from variable
         run: echo "$ssh_public_key" > ${{ github.workspace }}/id_rsa.pub
 
       - name: Run terraform init
@@ -38,7 +41,31 @@ jobs:
       - if: github.event.inputs.action == 'deploy'
         name: Run terraform apply
         run: terraform -chdir=terraform apply --auto-approve
-### Ansible step go here
+
+      - if: github.event.inputs.action == 'deploy'
+        name: Run ansible configuration
+        run: |
+          VM_IP=$(terraform -chdir=terraform  output -raw hylastix_vm_public_ip)
+          cat > ansible/inventory.yml << EOF
+          consul_server:
+            hosts:
+              hylvm:
+                ansible_host: $VM_IP
+                ansible_user: adminuser
+                consul_server: true
+                duck_dns_token: ${{ secrets.DUCK_DNS_TOKEN }}
+                letsencrypt_email: ${{ secrets.LETSENCRYPT_EMAIL }}
+                kc_client_secret: ${{ secrets.KC_CLIENT_SECRET }}
+          EOF
+          cat > ansible/playbook.yml << EOF
+          - name: Install Consul and Nomad
+            hosts:
+              - all
+            roles:
+              - consul
+              - nomad
+          EOF
+          ansible-playbook -i ansible/inventory.yml ansible/playbook.yml
       - if: github.event.inputs.action == 'destroy'
         name: Run terraform destroy
         run: terraform -chdir=terraform destroy --auto-approve
