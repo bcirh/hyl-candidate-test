@@ -10,7 +10,7 @@ keycloak_admin_user: admin
 keycloak_admin_password: changeme
 duck_dns_token: "define at runtime"
 letsencrypt_email: "define at runtime"
-grafana_url: hyl-grafana
+grafana_url: grafana.hyl
 kc_grafana_client_roles:
   - admin
   - editor
@@ -18,8 +18,8 @@ kc_grafana_client_roles:
 kc_realm_name: grafana
 kc_client_name: grafana-oauth
 kc_client_secret: "define at runtime"
-kc_url: hyl-keycloak
-top_domain: duckdns.org
+kc_url: keycloak.hyl
+top_domain: ip-ddns.com
 
 kc_user_grafana_realm:
   - name: user1
@@ -34,3 +34,12 @@ kc_user_grafana_realm:
     password: changeme
     email: user3@test.ws
     role: viewer
+
+nomad_url: nomad.hyl
+consul_url: consul.hyl
+
+cloudns_scripts:
+  - wget -q --read-timeout=0.0 --waitretry=5 --tries=400 --background https://ipv4.cloudns.net/api/dynamicURL/?q=ODMxMzY2MDo1NDM0NzYyNjU6NWJlZjE5OWMzNDM3NTkwY2FhZWI4YmFiYTRiYThiODQwYmRhNWVjZDBiYjVhYmFkOGZkNTE2MzE2ZWY4OWZjYw
+  - wget -q --read-timeout=0.0 --waitretry=5 --tries=400 --background https://ipv4.cloudns.net/api/dynamicURL/?q=ODMxMzY2MDo1NDM0NzYzMDU6MzNiNmQzMGRhMGUyOTZmNmM2YzNiOGM3ODNjMWFkMzVlODBiMDExZDM0NTBlMjI5OWRiMTQ1ZDU4ODFiMGU1MA
+  - wget -q --read-timeout=0.0 --waitretry=5 --tries=400 --background https://ipv4.cloudns.net/api/dynamicURL/?q=ODMxMzY2MDo1NDM0NzYzNjU6NmVlOTk5YTkxM2VmYzg1MmU5NjA2ODEwYTBmMjM0ZDg4MTNiN2EzOGYwZjgzYzY4NGQxOWJiYmIzMWY5ZjQ5NA
+  - wget -q --read-timeout=0.0 --waitretry=5 --tries=400 --background https://ipv4.cloudns.net/api/dynamicURL/?q=ODMxMzY2MDo1NDM0NzY0MDA6NzM1Zjc0YjA0NTQwZjRjNmE3YjMwODRlYzEwZWIzODM0YzIzZTI0YTc4YjA3YTYwOTA1YWJiNTMyYTdhN2M0Nw
