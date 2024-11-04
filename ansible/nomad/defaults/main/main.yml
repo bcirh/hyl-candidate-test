@@ -10,7 +10,6 @@ keycloak_admin_user: admin
 keycloak_admin_password: changeme
 duck_dns_token: "define at runtime"
 letsencrypt_email: "define at runtime"
-grafana_url: grafana.hyl
 kc_grafana_client_roles:
   - admin
   - editor
@@ -18,7 +17,6 @@ kc_grafana_client_roles:
 kc_realm_name: grafana
 kc_client_name: grafana-oauth
 kc_client_secret: "define at runtime"
-kc_url: keycloak.hyl
 top_domain: ip-ddns.com
 
 kc_user_grafana_realm:
@@ -35,8 +33,12 @@ kc_user_grafana_realm:
     email: user3@test.ws
     role: viewer
 
+kc_url: keycloak.hyl
+grafana_url: grafana.hyl
 nomad_url: nomad.hyl
 consul_url: consul.hyl
+
+grafana_oauth_tls_skip_verify: true
 
 cloudns_scripts:
   - name: nomad
