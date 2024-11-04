@@ -9,8 +9,7 @@ graph  LR
   ingress-->pod1[Keyclaoak];
   pod1-->pod3[Postgres];
   ingress-->pod2[Grafana];
-  pod2-->pod1[Keycloak]
-  pod4[duck-dns];
+  pod2-->pod1[Keycloak];
   end
   classDef plain fill:#ddd,stroke:#fff,stroke-width:4px,color:#000;
   classDef k8s fill:#326ce5,stroke:#fff,stroke-width:4px,color:#fff;
